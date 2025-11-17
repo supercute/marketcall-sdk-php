@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MarketCall\Request\Offers;
+namespace Marketcall\Request\Offers;
 
-use MarketCall\Request\AbstractRequest;
+use Marketcall\Request\AbstractRequest;
 
 class OffersRequest extends AbstractRequest
 {

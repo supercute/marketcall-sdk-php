@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace MarketCall\Model;
+namespace Marketcall\Model;
 
 class Price extends AbstractModel
 {
     public function __construct(
-        public float  $value,
+        public float  $amount,
         public string $currency,
     )
     {
@@ -16,7 +16,7 @@ class Price extends AbstractModel
     public static function fromArray(array $data): self
     {
         return new self(
-            value: (float)$data['value'],
+            amount: (float)$data['amount'],
             currency: $data['currency'],
         );
     }
@@ -24,7 +24,7 @@ class Price extends AbstractModel
     public function toArray(): array
     {
         return [
-            'value' => $this->value,
+            'amount' => $this->amount,
             'currency' => $this->currency,
         ];
     }

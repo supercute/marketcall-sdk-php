@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace MarketCall\Transport;
+namespace Marketcall\Transport;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\ServerException;
-use MarketCall\Common\Exceptions\ApiException;
-use MarketCall\Common\Exceptions\BadRequestException;
-use MarketCall\Common\Exceptions\ForbiddenException;
-use MarketCall\Common\Exceptions\NotFoundException;
-use MarketCall\Common\Exceptions\TooManyRequestsException;
-use MarketCall\Common\Exceptions\UnauthorizedException;
+use Marketcall\Common\Exceptions\ApiException;
+use Marketcall\Common\Exceptions\BadRequestException;
+use Marketcall\Common\Exceptions\ForbiddenException;
+use Marketcall\Common\Exceptions\NotFoundException;
+use Marketcall\Common\Exceptions\TooManyRequestsException;
+use Marketcall\Common\Exceptions\UnauthorizedException;
 use Psr\Http\Message\ResponseInterface;
 
 class HttpClient

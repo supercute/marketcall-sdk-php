@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarketCall\Model;
+namespace Marketcall\Model;
 
 use DateTimeImmutable;
 
@@ -14,7 +14,6 @@ class BrokerLead extends AbstractModel
         public ?string            $name,
         public int                $programId,
         public ?string            $comment,
-        public ?DateTimeImmutable $callAt,
         public ?DateTimeImmutable $receivedAt,
     )
     {
@@ -28,7 +27,6 @@ class BrokerLead extends AbstractModel
             name: $data['name'] ?? null,
             programId: $data['program_id'],
             comment: $data['comment'] ?? null,
-            callAt: isset($data['call_at']) ? new DateTimeImmutable($data['call_at']) : null,
             receivedAt: isset($data['received_at']) ? new DateTimeImmutable($data['received_at']) : null,
         );
     }

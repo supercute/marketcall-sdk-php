@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MarketCall\Request\Leads;
+namespace Marketcall\Request\Leads;
 
-use MarketCall\Request\AbstractRequest;
+use Marketcall\Request\AbstractRequest;
 
 class RefuseLeadRequest extends AbstractRequest
 {

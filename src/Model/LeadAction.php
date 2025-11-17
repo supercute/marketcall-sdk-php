@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace MarketCall\Model;
+namespace Marketcall\Model;
 
 class LeadAction extends AbstractModel
 {
     public function __construct(
-        public string  $type,
-        public ?string $comment,
+        public string  $action,
+        public ?string $title,
     )
     {
     }
@@ -16,16 +16,16 @@ class LeadAction extends AbstractModel
     public static function fromArray(array $data): self
     {
         return new self(
-            type: $data['type'],
-            comment: $data['comment'] ?? null,
+            action: $data['action'],
+            title: $data['title'] ?? null,
         );
     }
 
     public function toArray(): array
     {
         return [
-            'type' => $this->type,
-            'comment' => $this->comment,
+            'action' => $this->action,
+            'title' => $this->title,
         ];
     }
 }
