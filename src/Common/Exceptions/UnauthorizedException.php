@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarketCall\Common\Exceptions;
+namespace Marketcall\Common\Exceptions;
 class UnauthorizedException extends ApiException
 {
     public function __construct(

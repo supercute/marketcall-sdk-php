@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MarketCall\Request\Calls;
+namespace Marketcall\Request\Calls;
 
 use DateTimeInterface;
-use MarketCall\Request\AbstractRequest;
+use Marketcall\Request\AbstractRequest;
 
 class CallsRequest extends AbstractRequest
 {

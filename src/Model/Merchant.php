@@ -2,15 +2,13 @@
 
 declare(strict_types=1);
 
-namespace MarketCall\Model;
+namespace Marketcall\Model;
 
 class Merchant extends AbstractModel
 {
     public function __construct(
-        public int     $id,
-        public string  $name,
-        public string  $email,
-        public ?string $phone,
+        public int    $id,
+        public string $name,
     )
     {
     }
@@ -20,8 +18,6 @@ class Merchant extends AbstractModel
         return new self(
             id: $data['id'],
             name: $data['name'],
-            email: $data['email'],
-            phone: $data['phone'] ?? null,
         );
     }
 
@@ -30,8 +26,6 @@ class Merchant extends AbstractModel
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'email' => $this->email,
-            'phone' => $this->phone,
         ];
     }
 }

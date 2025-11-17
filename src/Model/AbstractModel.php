@@ -1,6 +1,6 @@
 <?php
 
-namespace MarketCall\Model;
+namespace Marketcall\Model;
 
 abstract class AbstractModel
 {

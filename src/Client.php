@@ -2,42 +2,41 @@
 
 declare(strict_types=1);
 
-namespace MarketCall;
+namespace Marketcall;
 
-use MarketCall\Common\Exceptions\ApiException;
-use MarketCall\Model\Account;
-use MarketCall\Model\BrokerLead;
-use MarketCall\Model\Call;
-use MarketCall\Model\Lead;
-use MarketCall\Model\Offer;
-use MarketCall\Model\Paginator;
-use MarketCall\Request\Broker\AddBrokerLeadRequest;
-use MarketCall\Request\Calls\CallsRequest;
-use MarketCall\Request\Calls\CommentCallRequest;
-use MarketCall\Request\Calls\RefuseCallRequest;
-use MarketCall\Request\Leads\CostLeadRequest;
-use MarketCall\Request\Leads\CreateLeadRequest;
-use MarketCall\Request\Leads\LeadsRequest;
-use MarketCall\Request\Leads\RefuseLeadRequest;
-use MarketCall\Request\Offers\OffersRequest;
-use MarketCall\Transport\HttpClient;
+use Marketcall\Common\Exceptions\ApiException;
+use Marketcall\Model\Account;
+use Marketcall\Model\BrokerLead;
+use Marketcall\Model\Call;
+use Marketcall\Model\Lead;
+use Marketcall\Model\Offer;
+use Marketcall\Model\Paginator;
+use Marketcall\Request\Broker\AddBrokerLeadRequest;
+use Marketcall\Request\Calls\CallsRequest;
+use Marketcall\Request\Calls\CommentCallRequest;
+use Marketcall\Request\Calls\RefuseCallRequest;
+use Marketcall\Request\Leads\CostLeadRequest;
+use Marketcall\Request\Leads\CreateLeadRequest;
+use Marketcall\Request\Leads\LeadsRequest;
+use Marketcall\Request\Leads\RefuseLeadRequest;
+use Marketcall\Request\Offers\OffersRequest;
+use Marketcall\Transport\HttpClient;
 
 class Client
 {
-    private const API_BASE_URL = 'https://www.marketcall.ru/api/v1/merchant';
+    private const API_BASE_URL = 'https://www.marketcall.ru/api/v1/merchant/';
 
     private HttpClient $httpClient;
     private string $apiKey;
     private ?string $requestId = null;
 
     public function __construct(
-        string  $apiKey,
-        ?string $baseUrl = null,
+        string $apiKey,
     )
     {
         $this->apiKey = $apiKey;
         $this->httpClient = new HttpClient(
-            $baseUrl ?? self::API_BASE_URL,
+            self::API_BASE_URL,
             $this->apiKey,
         );
     }
@@ -51,7 +50,7 @@ class Client
     public function getCalls(?CallsRequest $request = null): array
     {
         $params = $request?->toArray() ?? [];
-        $response = $this->httpClient->get('/calls', $params);
+        $response = $this->httpClient->get('calls', $params);
         return $this->parseListResponse($response, Call::class);
     }
 
@@ -62,7 +61,7 @@ class Client
      */
     public function getCall(int $callId): Call
     {
-        $response = $this->httpClient->get("/calls/{$callId}");
+        $response = $this->httpClient->get("calls/{$callId}");
         return Call::fromArray($response['data']);
     }
 
@@ -73,7 +72,7 @@ class Client
      */
     public function approveCall(int $callId): Call
     {
-        $response = $this->httpClient->post("/calls/{$callId}/approve");
+        $response = $this->httpClient->post("calls/{$callId}/approve");
         return Call::fromArray($response['data']);
     }
 
@@ -84,7 +83,7 @@ class Client
      */
     public function refuseCall(int $callId, RefuseCallRequest $request): Call
     {
-        $response = $this->httpClient->post("/calls/{$callId}/refuse", $request->toArray());
+        $response = $this->httpClient->post("calls/{$callId}/refuse", $request->toArray());
         return Call::fromArray($response['data']);
     }
 
@@ -95,7 +94,7 @@ class Client
      */
     public function commentCall(int $callId, CommentCallRequest $request): Call
     {
-        $response = $this->httpClient->post("/calls/{$callId}/comment", $request->toArray());
+        $response = $this->httpClient->post("calls/{$callId}/comment", $request->toArray());
         return Call::fromArray($response['data']);
     }
 
@@ -107,7 +106,7 @@ class Client
     public function getOffers(?OffersRequest $request = null): array
     {
         $params = $request?->toArray() ?? [];
-        $response = $this->httpClient->get('/offers', $params);
+        $response = $this->httpClient->get('offers', $params);
         return $this->parseListResponse($response, Offer::class);
     }
 
@@ -119,7 +118,7 @@ class Client
      */
     public function getOffer(int $offerId): Offer
     {
-        $response = $this->httpClient->get("/offers/{$offerId}");
+        $response = $this->httpClient->get("offers/{$offerId}");
         return Offer::fromArray($response['data']);
     }
 
@@ -129,7 +128,7 @@ class Client
     public function getLeads(?LeadsRequest $request = null): array
     {
         $params = $request?->toArray() ?? [];
-        $response = $this->httpClient->get('/leads', $params);
+        $response = $this->httpClient->get('leads', $params);
         return $this->parseListResponse($response, Lead::class);
     }
 
@@ -140,7 +139,7 @@ class Client
      */
     public function getLead(int $leadId): Lead
     {
-        $response = $this->httpClient->get("/leads/{$leadId}");
+        $response = $this->httpClient->get("leads/{$leadId}");
         return Lead::fromArray($response['data']);
     }
 
@@ -151,7 +150,7 @@ class Client
      */
     public function createLead(CreateLeadRequest $request): Lead
     {
-        $response = $this->httpClient->post('/leads', $request->toArray());
+        $response = $this->httpClient->post('leads', $request->toArray());
         return Lead::fromArray($response['data']);
     }
 
@@ -162,7 +161,7 @@ class Client
      */
     public function approveLead(int $leadId): Lead
     {
-        $response = $this->httpClient->post("/leads/{$leadId}/approve");
+        $response = $this->httpClient->post("leads/{$leadId}/approve");
         return Lead::fromArray($response['data']);
     }
 
@@ -173,7 +172,7 @@ class Client
      */
     public function holdLead(int $leadId): Lead
     {
-        $response = $this->httpClient->post("/leads/{$leadId}/hold");
+        $response = $this->httpClient->post("leads/{$leadId}/hold");
         return Lead::fromArray($response['data']);
     }
 
@@ -184,7 +183,7 @@ class Client
      */
     public function refuseLead(int $leadId, RefuseLeadRequest $request): Lead
     {
-        $response = $this->httpClient->post("/leads/{$leadId}/refuse", $request->toArray());
+        $response = $this->httpClient->post("leads/{$leadId}/refuse", $request->toArray());
         return Lead::fromArray($response['data']);
     }
 
@@ -195,7 +194,7 @@ class Client
      */
     public function setLeadCost(int $leadId, CostLeadRequest $request): Lead
     {
-        $response = $this->httpClient->post("/leads/{$leadId}/cost", $request->toArray());
+        $response = $this->httpClient->post("leads/{$leadId}/cost", $request->toArray());
         return Lead::fromArray($response['data']);
     }
 
@@ -206,7 +205,7 @@ class Client
     public function addBrokerLead(AddBrokerLeadRequest $request): array
     {
         $params = $request->toArray();
-        $response = $this->httpClient->post('/broker/leads', $params);
+        $response = $this->httpClient->post('broker/leads', $params);
 
         $this->requestId = $response['request_id'] ?? null;
 
@@ -222,7 +221,7 @@ class Client
      */
     public function getAccounts(): array
     {
-        $response = $this->httpClient->get('/accounts');
+        $response = $this->httpClient->get('accounts');
         return $this->parseListResponse($response, Account::class);
     }
 

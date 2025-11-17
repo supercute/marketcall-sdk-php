@@ -23,8 +23,7 @@ composer require supercute/marketcall-sdk-php
 
 ```php
 <?php
-use MarketCall\Client;
-use MarketCall\Request\Leads\LeadsRequest;
+use Marketcall\Client;use Marketcall\Request\Leads\LeadsRequest;
 
 $apiKey = 'API_KEY';
 $client = new Client($apiKey);

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MarketCall\Request\Broker;
+namespace Marketcall\Request\Broker;
 
-use MarketCall\Request\AbstractRequest;
+use Marketcall\Request\AbstractRequest;
 
 class AddBrokerLeadRequest extends AbstractRequest
 {

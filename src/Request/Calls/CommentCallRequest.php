@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MarketCall\Request\Calls;
+namespace Marketcall\Request\Calls;
 
-use MarketCall\Request\AbstractRequest;
+use Marketcall\Request\AbstractRequest;
 
 class CommentCallRequest extends AbstractRequest
 {

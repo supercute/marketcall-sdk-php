@@ -1,9 +1,9 @@
 <?php
 
-namespace MarketCall;
+namespace Marketcall;
 
-use MarketCall\Model\Lead;
-use MarketCall\Model\Paginator;
+use Marketcall\Model\Lead;
+use Marketcall\Model\Paginator;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 

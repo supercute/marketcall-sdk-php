@@ -1,6 +1,6 @@
 <?php
 
-namespace MarketCall\Request;
+namespace Marketcall\Request;
 
 class AbstractRequest
 {

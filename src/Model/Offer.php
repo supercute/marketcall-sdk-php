@@ -2,32 +2,35 @@
 
 declare(strict_types=1);
 
-namespace MarketCall\Model;
+namespace Marketcall\Model;
 
 class Offer extends AbstractModel
 {
     public function __construct(
-        public int    $id,
-        public string $name,
-        public string $description,
-        public float  $price,
-        public string $currency,
-        public bool   $isActive,
-        public ?int   $programId,
-    )
-    {
+        public int $id,
+        public string $title,
+        public string $phone,
+        public bool $isGuest,
+        public Merchant $merchant,
+        public int $epcw,
+        public int $activeProgramsCount,
+        public int $keyCallsPercentage,
+        public int $state
+    ) {
     }
 
     public static function fromArray(array $data): self
     {
         return new self(
             id: $data['id'],
-            name: $data['name'],
-            description: $data['description'],
-            price: (float)$data['price'],
-            currency: $data['currency'],
-            isActive: $data['is_active'] ?? true,
-            programId: $data['program_id'] ?? null,
+            title: $data['title'],
+            phone: $data['phone'],
+            isGuest: filter_var($data['is_guest'], FILTER_VALIDATE_BOOLEAN),
+            merchant: Merchant::fromArray($data['merchant']),
+            epcw: (int)$data['epcw'],
+            activeProgramsCount: (int)$data['active_programs_count'],
+            keyCallsPercentage: (int)$data['key_calls_percentage'],
+            state: (int)$data['state']
         );
     }
 
@@ -35,12 +38,17 @@ class Offer extends AbstractModel
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'description' => $this->description,
-            'price' => $this->price,
-            'currency' => $this->currency,
-            'is_active' => $this->isActive,
-            'program_id' => $this->programId,
+            'title' => $this->title,
+            'phone' => $this->phone,
+            'is_guest' => $this->isGuest,
+            'merchant' => [
+                'id' => $this->merchant->id,
+                'name' => $this->merchant->name,
+            ],
+            'epcw' => $this->epcw,
+            'active_programs_count' => $this->activeProgramsCount,
+            'key_calls_percentage' => $this->keyCallsPercentage,
+            'state' => $this->state,
         ];
     }
 }

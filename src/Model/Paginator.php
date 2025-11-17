@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarketCall\Model;
+namespace Marketcall\Model;
 
 class Paginator extends AbstractModel
 {
