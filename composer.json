@@ -1,0 +1,34 @@
+{
+  "name": "supercute/marketcall-sdk-php",
+  "description": "PHP SDK for MarketCall API",
+  "type": "library",
+  "keywords": ["marketcall", "api", "sdk", "merchant", "calls", "leads"],
+  "license": "MIT",
+  "version": "1.0.0",
+  "require": {
+    "php": "^8.0",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "ext-mbstring": "*",
+    "guzzlehttp/guzzle": "^7.5",
+    "psr/http-client": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.0",
+    "phpstan/phpstan": "^1.10"
+  },
+  "autoload": {
+    "psr-4": {
+      "Marketcall\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Marketcall\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit --colors=always tests",
+    "phpstan": "phpstan analyse src tests"
+  }
+}
