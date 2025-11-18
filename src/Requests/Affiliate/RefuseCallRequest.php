@@ -15,11 +15,6 @@ class RefuseCallRequest extends AbstractRequest
         $this->reason = $reason;
     }
 
-    /**
-     * Преобразовать в массив
-     *
-     * @return array
-     */
     public function toArray(): array
     {
         return [

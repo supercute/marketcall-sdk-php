@@ -30,13 +30,6 @@ class Call extends AbstractModel
     {
     }
 
-    /**
-     * Создать из массива
-     *
-     * @param array $data
-     * @return self
-     * @throws \Exception
-     */
     public static function fromArray(array $data): self
     {
         return new self(
@@ -59,11 +52,6 @@ class Call extends AbstractModel
         );
     }
 
-    /**
-     * Преобразовать в массив
-     *
-     * @return array
-     */
     public function toArray(): array
     {
         return [

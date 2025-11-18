@@ -6,7 +6,11 @@
 
 ## Документация
 
+### Merchant
 https://www.marketcall.ru/merchant/api/docs
+
+### Affiliate
+https://www.marketcall.ru/affiliate/api/docs
 
 ## Установка
 
