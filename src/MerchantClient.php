@@ -22,7 +22,7 @@ use Marketcall\Request\Leads\RefuseLeadRequest;
 use Marketcall\Request\Offers\OffersRequest;
 use Marketcall\Transport\HttpClient;
 
-class Client
+class MerchantClient
 {
     private const API_BASE_URL = 'https://www.marketcall.ru/api/v1/merchant/';
 

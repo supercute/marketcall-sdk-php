@@ -13,20 +13,27 @@ composer require supercute/marketcall-sdk-php
 
 ## Поддержка
 
+### Рекламодатель
+
 1. Звонки
 2. Офферы
 3. Лиды
 4. Брокер
 5. Счета
 
+
+### Брокер
+
+Coming soon...
+
 ## Пример использования
 
 ```php
 <?php
-use Marketcall\Client;use Marketcall\Request\Leads\LeadsRequest;
+use Marketcall\MerchantClient;use Marketcall\Request\Leads\LeadsRequest;
 
 $apiKey = 'API_KEY';
-$client = new Client($apiKey);
+$client = new MerchantClient($apiKey);
 
 // Запрос с фильтрами по статусу и дате
 $request = (new LeadsRequest())
