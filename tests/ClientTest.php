@@ -2,8 +2,8 @@
 
 namespace Marketcall;
 
-use Marketcall\Model\Lead;
-use Marketcall\Model\Paginator;
+use Marketcall\Models\Merchant\Lead;
+use Marketcall\Models\Paginator;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 

@@ -54,6 +54,17 @@ class HttpClient
 
     /**
      * @param string $path
+     * @param array $params
+     * @return array
+     * @throws ApiException
+     */
+    public function getBinary(string $path, array $params = []): array
+    {
+        return $this->requestBinary('GET', $path, ['query' => $params]);
+    }
+
+    /**
+     * @param string $path
      * @param array $data
      * @return array
      * @throws ApiException
@@ -119,6 +130,58 @@ class HttpClient
             );
         }
         throw new \Exception('Request failed');
+    }
+
+    /**
+     * @param string $method
+     * @param string $path
+     * @param array $options
+     * @return array
+     * @throws ApiException
+     */
+    private function requestBinary(string $method, string $path, array $options = []): array
+    {
+        // Добавляем API ключ в заголовок
+        $options['headers']['X-Api-Key'] = $this->apiKey;
+
+        try {
+            $response = $this->client->request($method, $path, $options);
+
+            $this->processRateLimitHeaders($response);
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode >= 200 && $statusCode < 300) {
+                return [
+                    'body' => $response->getBody()->getContents(),
+                    'headers' => $this->extractHeaders($response),
+                ];
+            }
+
+            $this->handleErrorResponse($response);
+        } catch (ClientException|ServerException $e) {
+            $this->handleGuzzleException($e);
+        } catch (GuzzleException $e) {
+            throw new ApiException(
+                'Request failed: ' . $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
+
+        throw new \Exception('Request failed');
+    }
+
+    private function extractHeaders(ResponseInterface $response): array
+    {
+        $headers = [];
+        foreach ($response->getHeaders() as $name => $values) {
+            $headers[] = [
+                'key' => $name,
+                'value' => implode(', ', $values),
+            ];
+        }
+        return $headers;
     }
 
     private function processRateLimitHeaders(ResponseInterface $response): void

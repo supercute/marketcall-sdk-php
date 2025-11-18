@@ -5,30 +5,27 @@ declare(strict_types=1);
 namespace Marketcall;
 
 use Marketcall\Common\Exceptions\ApiException;
-use Marketcall\Model\Account;
-use Marketcall\Model\BrokerLead;
-use Marketcall\Model\Call;
-use Marketcall\Model\Lead;
-use Marketcall\Model\Offer;
-use Marketcall\Model\Paginator;
-use Marketcall\Request\Broker\AddBrokerLeadRequest;
-use Marketcall\Request\Calls\CallsRequest;
-use Marketcall\Request\Calls\CommentCallRequest;
-use Marketcall\Request\Calls\RefuseCallRequest;
-use Marketcall\Request\Leads\CostLeadRequest;
-use Marketcall\Request\Leads\CreateLeadRequest;
-use Marketcall\Request\Leads\LeadsRequest;
-use Marketcall\Request\Leads\RefuseLeadRequest;
-use Marketcall\Request\Offers\OffersRequest;
+use Marketcall\Models\Merchant\Account;
+use Marketcall\Models\Merchant\BrokerLead;
+use Marketcall\Models\Merchant\Call;
+use Marketcall\Models\Merchant\Lead;
+use Marketcall\Models\Merchant\Offer;
+use Marketcall\Requests\Affiliate\CommentCallRequest;
+use Marketcall\Requests\Affiliate\RefuseCallRequest;
+use Marketcall\Requests\Merchant\AddBrokerLeadRequest;
+use Marketcall\Requests\Merchant\CostLeadRequest;
+use Marketcall\Requests\Merchant\LeadsRequest;
+use Marketcall\Requests\Merchant\CallsRequest;
+use Marketcall\Requests\Merchant\OffersRequest;
+use Marketcall\Requests\Merchant\RefuseLeadRequest;
 use Marketcall\Transport\HttpClient;
 
-class MerchantClient
+class MerchantClient extends AbstractClient
 {
     private const API_BASE_URL = 'https://www.marketcall.ru/api/v1/merchant/';
 
     private HttpClient $httpClient;
     private string $apiKey;
-    private ?string $requestId = null;
 
     public function __construct(
         string $apiKey,
@@ -42,7 +39,7 @@ class MerchantClient
     }
 
     /**
-     * Список звонков
+     * Получить список звонков
      * @param CallsRequest|null $request
      * @return array
      * @throws ApiException
@@ -54,53 +51,54 @@ class MerchantClient
         return $this->parseListResponse($response, Call::class);
     }
 
+
     /**
-     * Информация о звонке
+     * Получить информацию о звонке
      * @throws ApiException
      * @throws \Exception
      */
     public function getCall(int $callId): Call
     {
         $response = $this->httpClient->get("calls/{$callId}");
-        return Call::fromArray($response['data']);
+        return $this->parseResponse($response, Call::class);
     }
 
     /**
-     * Подтверждение звонка
+     * Подтвердить звонок
      * @throws ApiException
      * @throws \Exception
      */
     public function approveCall(int $callId): Call
     {
         $response = $this->httpClient->post("calls/{$callId}/approve");
-        return Call::fromArray($response['data']);
+        return $this->parseResponse($response, Call::class);
     }
 
     /**
-     * Отклонение звонка
+     * Отклонить звонок
      * @throws ApiException
      * @throws \Exception
      */
     public function refuseCall(int $callId, RefuseCallRequest $request): Call
     {
         $response = $this->httpClient->post("calls/{$callId}/refuse", $request->toArray());
-        return Call::fromArray($response['data']);
+        return $this->parseResponse($response, Call::class);
     }
 
     /**
-     * Комментирование звонка
+     * Добавить комментарий к звонку
      * @throws ApiException
      * @throws \Exception
      */
     public function commentCall(int $callId, CommentCallRequest $request): Call
     {
         $response = $this->httpClient->post("calls/{$callId}/comment", $request->toArray());
-        return Call::fromArray($response['data']);
+        return $this->parseResponse($response, Call::class);
     }
 
 
     /**
-     * Список офферов
+     * Получить список офферов
      * @throws ApiException
      */
     public function getOffers(?OffersRequest $request = null): array
@@ -111,7 +109,7 @@ class MerchantClient
     }
 
     /**
-     * Информация об оффере
+     * Получить информацию об оффере
      * @param int $offerId
      * @return Offer
      * @throws ApiException
@@ -119,10 +117,11 @@ class MerchantClient
     public function getOffer(int $offerId): Offer
     {
         $response = $this->httpClient->get("offers/{$offerId}");
-        return Offer::fromArray($response['data']);
+        return $this->parseResponse($response, Offer::class);
     }
 
     /**
+     * Получить список лидов
      * @throws ApiException
      */
     public function getLeads(?LeadsRequest $request = null): array
@@ -133,89 +132,73 @@ class MerchantClient
     }
 
     /**
-     * Список лидов
+     * Получить информацию о лиде
      * @throws ApiException
      * @throws \Exception
      */
     public function getLead(int $leadId): Lead
     {
         $response = $this->httpClient->get("leads/{$leadId}");
-        return Lead::fromArray($response['data']);
+        return $this->parseResponse($response, Lead::class);
     }
 
     /**
-     * Информация о лиде
-     * @throws ApiException
-     * @throws \Exception
-     */
-    public function createLead(CreateLeadRequest $request): Lead
-    {
-        $response = $this->httpClient->post('leads', $request->toArray());
-        return Lead::fromArray($response['data']);
-    }
-
-    /**
-     * Подтверждение лида
+     * Подтвердить лид
      * @throws ApiException
      * @throws \Exception
      */
     public function approveLead(int $leadId): Lead
     {
         $response = $this->httpClient->post("leads/{$leadId}/approve");
-        return Lead::fromArray($response['data']);
+        return $this->parseResponse($response, Lead::class);
     }
 
     /**
-     * Перевод лида в HOLD
+     * Перевести лид в HOLD
      * @throws ApiException
      * @throws \Exception
      */
     public function holdLead(int $leadId): Lead
     {
         $response = $this->httpClient->post("leads/{$leadId}/hold");
-        return Lead::fromArray($response['data']);
+        return $this->parseResponse($response, Lead::class);
     }
 
     /**
-     * Отклонение лида
+     * Отклонить лид
      * @throws ApiException
      * @throws \Exception
      */
     public function refuseLead(int $leadId, RefuseLeadRequest $request): Lead
     {
         $response = $this->httpClient->post("leads/{$leadId}/refuse", $request->toArray());
-        return Lead::fromArray($response['data']);
+        return $this->parseResponse($response, Lead::class);
     }
 
     /**
-     * Изменение ценности лида
+     * Изменить ценность лида
      * @throws ApiException
      * @throws \Exception
      */
     public function setLeadCost(int $leadId, CostLeadRequest $request): Lead
     {
         $response = $this->httpClient->post("leads/{$leadId}/cost", $request->toArray());
-        return Lead::fromArray($response['data']);
+        return $this->parseResponse($response, Lead::class);
     }
 
     /**
-     * Добавление лида для брокера
+     * Добавить лид для брокера
      * @throws ApiException
      */
-    public function addBrokerLead(AddBrokerLeadRequest $request): array
+    public function addBrokerLead(AddBrokerLeadRequest $request): BrokerLead
     {
         $params = $request->toArray();
         $response = $this->httpClient->post('broker/leads', $params);
-
-        $this->requestId = $response['request_id'] ?? null;
-
-        $data = $response['data'] ?? [];
-
-        return array_map(fn(array $item) => BrokerLead::fromArray($item), is_array($data) ? $data : []);
+        return $this->parseResponse($response, BrokerLead::class);
     }
 
     /**
-     * Список счетов рекламодателя
+     * Получить список счетов рекламодателя
      * @return array
      * @throws ApiException
      */
@@ -223,31 +206,5 @@ class MerchantClient
     {
         $response = $this->httpClient->get('accounts');
         return $this->parseListResponse($response, Account::class);
-    }
-
-    public function getLastRequestId(): ?string
-    {
-        return $this->requestId;
-    }
-
-    /**
-     * @template T
-     * @param array $response
-     * @param class-string<T> $modelClass
-     * @return array{data: T[], paginator: ?Paginator}
-     * @throws ApiException
-     */
-    protected function parseListResponse(array $response, string $modelClass): array
-    {
-        $this->requestId = $response['request_id'] ?? null;
-
-        $data = array_map(fn(array $item) => $modelClass::fromArray($item), $response['data'] ?? []);
-
-        $paginator = isset($response['paginator']) ? Paginator::fromArray($response['paginator']) : null;
-
-        return [
-            'data' => $data,
-            'paginator' => $paginator,
-        ];
     }
 }

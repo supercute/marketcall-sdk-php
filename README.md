@@ -28,20 +28,30 @@ composer require supercute/marketcall-sdk-php
 
 ### Брокер
 
+1. Звонки
+2. Номера
+3. Офферы
+4. Программы
+5. Каналы
+6. Лиды
+
 Coming soon...
+1. Брокер
+2. Расходы
+3. 
 
 ## Пример использования
 
 ```php
 <?php
-use Marketcall\MerchantClient;use Marketcall\Request\Leads\LeadsRequest;
+use Marketcall\MerchantClient;use Marketcall\Requests\Merchant\LeadsRequest;
 
 $apiKey = 'API_KEY';
 $client = new MerchantClient($apiKey);
 
 // Запрос с фильтрами по статусу и дате
 $request = (new LeadsRequest())
-    ->setStates(['approved', 'pending'])
+    ->setState(['approved', 'pending'])
     ->setDateFrom(new DateTimeImmutable('2025-01-01T00:00:00+00:00'))
     ->setDateTo(new DateTimeImmutable('2025-12-31T23:59:59+00:00'));
 
