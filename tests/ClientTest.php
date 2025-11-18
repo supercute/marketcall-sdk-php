@@ -9,11 +9,11 @@ use ReflectionClass;
 
 class ClientTest extends TestCase
 {
-    private Client $client;
+    private MerchantClient $client;
 
     protected function setUp(): void
     {
-        $this->client = new Client('dummy_key');
+        $this->client = new MerchantClient('dummy_key');
     }
 
     public function testParseListResponseReturnsTypedDataAndPaginator(): void

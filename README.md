@@ -1,4 +1,8 @@
 # PHP SDK для MarketСall API
+![Packagist Version](https://img.shields.io/packagist/v/supercute/marketcall-sdk-php)
+![Packagist Dependency Version](https://img.shields.io/packagist/dependency-v/supercute/marketcall-sdk-php/php)
+
+
 
 ## Документация
 
