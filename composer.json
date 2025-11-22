@@ -4,7 +4,7 @@
   "type": "library",
   "keywords": ["marketcall", "api", "sdk", "merchant", "calls", "leads"],
   "license": "MIT",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "require": {
     "php": "^8.0",
     "ext-curl": "*",

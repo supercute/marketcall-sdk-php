@@ -15,7 +15,7 @@ class ListResponse
 
     public function getData(): array
     {
-        return $this->getData();
+        return $this->data;
     }
 
     public function getPaginator(): ?Paginator
