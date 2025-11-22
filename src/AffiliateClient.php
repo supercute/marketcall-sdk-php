@@ -16,6 +16,7 @@ use Marketcall\Models\Affiliate\Phone;
 use Marketcall\Models\Affiliate\Program;
 use Marketcall\Models\Affiliate\Region;
 use Marketcall\Models\BinaryFile;
+use Marketcall\Models\ListResponse;
 use Marketcall\Models\Success;
 use Marketcall\Requests\Affiliate\CallsCountRequest;
 use Marketcall\Requests\Affiliate\CallsRequest;
@@ -33,6 +34,9 @@ class AffiliateClient extends AbstractClient
     private HttpClient $httpClient;
     private string $apiKey;
 
+    /**
+     * @param string $apiKey
+     */
     public function __construct(
         string $apiKey,
     )
@@ -47,10 +51,10 @@ class AffiliateClient extends AbstractClient
     /**
      * Получить список звонков
      * @param CallsRequest|null $request
-     * @return array
+     * @return ListResponse
      * @throws ApiException
      */
-    public function getCalls(?CallsRequest $request = null): array
+    public function getCalls(?CallsRequest $request = null): ListResponse
     {
         $params = $request?->toArray() ?? [];
         $response = $this->httpClient->get('calls', $params);
@@ -59,8 +63,9 @@ class AffiliateClient extends AbstractClient
 
     /**
      * Получить количество звонков
+     * @param CallsCountRequest|null $request
+     * @return CallCount
      * @throws ApiException
-     * @throws \Exception
      */
     public function getCallsCount(?CallsCountRequest $request = null): CallCount
     {
@@ -91,9 +96,11 @@ class AffiliateClient extends AbstractClient
 
     /**
      * Получить список номеров
+     * @param bool $without_programs
+     * @return ListResponse
      * @throws ApiException
      */
-    public function getPhones(bool $without_programs = false): array
+    public function getPhones(bool $without_programs = false): ListResponse
     {
         $params = [];
         if ($without_programs) {
@@ -105,9 +112,10 @@ class AffiliateClient extends AbstractClient
 
     /**
      * Получить список регионов
+     * @return ListResponse
      * @throws ApiException
      */
-    public function getRegions(): array
+    public function getRegions(): ListResponse
     {
         $response = $this->httpClient->get('regions');
         return $this->parseListResponse($response, Region::class);
@@ -115,20 +123,22 @@ class AffiliateClient extends AbstractClient
 
     /**
      * Получить список категорий
+     * @return ListResponse
      * @throws ApiException
      */
-    public function getCategories(): array
+    public function getCategories(): ListResponse
     {
         $response = $this->httpClient->get('categories');
-        var_dump($response);
         return $this->parseListResponse($response, Category::class);
     }
 
     /**
      * Получить список офферов
+     * @param OffersRequest|null $request
+     * @return ListResponse
      * @throws ApiException
      */
-    public function getOffers(?OffersRequest $request = null): array
+    public function getOffers(?OffersRequest $request = null): ListResponse
     {
         $params = $request?->toArray() ?? [];
         $response = $this->httpClient->get('offers', $params);
@@ -149,6 +159,8 @@ class AffiliateClient extends AbstractClient
 
     /**
      * Проверить возможность совершить входящий звонок на оффер
+     * @param int $offerId
+     * @return IncomingCallAbility
      * @throws ApiException
      */
     public function getIncomingCallAbility(int $offerId): IncomingCallAbility
@@ -159,9 +171,11 @@ class AffiliateClient extends AbstractClient
 
     /**
      * Получить список программ
+     * @param ProgramsRequest $request
+     * @return ListResponse
      * @throws ApiException
      */
-    public function getPrograms(ProgramsRequest $request): array
+    public function getPrograms(ProgramsRequest $request): ListResponse
     {
         $params = $request?->toArray() ?? [];
         $response = $this->httpClient->get('programs', $params);
@@ -200,10 +214,10 @@ class AffiliateClient extends AbstractClient
     /**
      * Получить список лидов
      * @param LeadsRequest|null $request
-     * @return array
+     * @return ListResponse
      * @throws ApiException
      */
-    public function getLeads(?LeadsRequest $request = null): array
+    public function getLeads(?LeadsRequest $request = null): ListResponse
     {
         $params = $request?->toArray() ?? [];
         $response = $this->httpClient->get('leads', $params);
@@ -224,9 +238,11 @@ class AffiliateClient extends AbstractClient
 
     /**
      * Получить список каналов
+     * @param ChannelsRequest|null $request
+     * @return ListResponse
      * @throws ApiException
      */
-    public function getChannels(?ChannelsRequest $request = null): array
+    public function getChannels(?ChannelsRequest $request = null): ListResponse
     {
         $params = $request?->toArray() ?? [];
         $response = $this->httpClient->get('channels', $params);

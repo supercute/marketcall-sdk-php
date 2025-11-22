@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Marketcall;
 
 use Marketcall\Common\Exceptions\ApiException;
+use Marketcall\Models\ListResponse;
 use Marketcall\Models\Merchant\Account;
 use Marketcall\Models\Merchant\BrokerLead;
 use Marketcall\Models\Merchant\Call;
@@ -13,9 +14,9 @@ use Marketcall\Models\Merchant\Offer;
 use Marketcall\Requests\Affiliate\CommentCallRequest;
 use Marketcall\Requests\Affiliate\RefuseCallRequest;
 use Marketcall\Requests\Merchant\AddBrokerLeadRequest;
+use Marketcall\Requests\Merchant\CallsRequest;
 use Marketcall\Requests\Merchant\CostLeadRequest;
 use Marketcall\Requests\Merchant\LeadsRequest;
-use Marketcall\Requests\Merchant\CallsRequest;
 use Marketcall\Requests\Merchant\OffersRequest;
 use Marketcall\Requests\Merchant\RefuseLeadRequest;
 use Marketcall\Transport\HttpClient;
@@ -41,10 +42,10 @@ class MerchantClient extends AbstractClient
     /**
      * Получить список звонков
      * @param CallsRequest|null $request
-     * @return array
+     * @return ListResponse
      * @throws ApiException
      */
-    public function getCalls(?CallsRequest $request = null): array
+    public function getCalls(?CallsRequest $request = null): ListResponse
     {
         $params = $request?->toArray() ?? [];
         $response = $this->httpClient->get('calls', $params);
@@ -54,8 +55,9 @@ class MerchantClient extends AbstractClient
 
     /**
      * Получить информацию о звонке
+     * @param int $callId
+     * @return Call
      * @throws ApiException
-     * @throws \Exception
      */
     public function getCall(int $callId): Call
     {
@@ -65,8 +67,9 @@ class MerchantClient extends AbstractClient
 
     /**
      * Подтвердить звонок
+     * @param int $callId
+     * @return Call
      * @throws ApiException
-     * @throws \Exception
      */
     public function approveCall(int $callId): Call
     {
@@ -76,8 +79,10 @@ class MerchantClient extends AbstractClient
 
     /**
      * Отклонить звонок
+     * @param int $callId
+     * @param RefuseCallRequest $request
+     * @return Call
      * @throws ApiException
-     * @throws \Exception
      */
     public function refuseCall(int $callId, RefuseCallRequest $request): Call
     {
@@ -87,8 +92,10 @@ class MerchantClient extends AbstractClient
 
     /**
      * Добавить комментарий к звонку
+     * @param int $callId
+     * @param CommentCallRequest $request
+     * @return Call
      * @throws ApiException
-     * @throws \Exception
      */
     public function commentCall(int $callId, CommentCallRequest $request): Call
     {
@@ -99,9 +106,11 @@ class MerchantClient extends AbstractClient
 
     /**
      * Получить список офферов
+     * @param OffersRequest|null $request
+     * @return ListResponse
      * @throws ApiException
      */
-    public function getOffers(?OffersRequest $request = null): array
+    public function getOffers(?OffersRequest $request = null): ListResponse
     {
         $params = $request?->toArray() ?? [];
         $response = $this->httpClient->get('offers', $params);
@@ -122,9 +131,11 @@ class MerchantClient extends AbstractClient
 
     /**
      * Получить список лидов
+     * @param LeadsRequest|null $request
+     * @return ListResponse
      * @throws ApiException
      */
-    public function getLeads(?LeadsRequest $request = null): array
+    public function getLeads(?LeadsRequest $request = null): ListResponse
     {
         $params = $request?->toArray() ?? [];
         $response = $this->httpClient->get('leads', $params);
@@ -133,8 +144,9 @@ class MerchantClient extends AbstractClient
 
     /**
      * Получить информацию о лиде
+     * @param int $leadId
+     * @return Lead
      * @throws ApiException
-     * @throws \Exception
      */
     public function getLead(int $leadId): Lead
     {
@@ -144,8 +156,9 @@ class MerchantClient extends AbstractClient
 
     /**
      * Подтвердить лид
+     * @param int $leadId
+     * @return Lead
      * @throws ApiException
-     * @throws \Exception
      */
     public function approveLead(int $leadId): Lead
     {
@@ -155,8 +168,9 @@ class MerchantClient extends AbstractClient
 
     /**
      * Перевести лид в HOLD
+     * @param int $leadId
+     * @return Lead
      * @throws ApiException
-     * @throws \Exception
      */
     public function holdLead(int $leadId): Lead
     {
@@ -177,8 +191,10 @@ class MerchantClient extends AbstractClient
 
     /**
      * Изменить ценность лида
+     * @param int $leadId
+     * @param CostLeadRequest $request
+     * @return Lead
      * @throws ApiException
-     * @throws \Exception
      */
     public function setLeadCost(int $leadId, CostLeadRequest $request): Lead
     {
@@ -188,6 +204,8 @@ class MerchantClient extends AbstractClient
 
     /**
      * Добавить лид для брокера
+     * @param AddBrokerLeadRequest $request
+     * @return BrokerLead
      * @throws ApiException
      */
     public function addBrokerLead(AddBrokerLeadRequest $request): BrokerLead
@@ -199,10 +217,10 @@ class MerchantClient extends AbstractClient
 
     /**
      * Получить список счетов рекламодателя
-     * @return array
+     * @return ListResponse
      * @throws ApiException
      */
-    public function getAccounts(): array
+    public function getAccounts(): ListResponse
     {
         $response = $this->httpClient->get('accounts');
         return $this->parseListResponse($response, Account::class);

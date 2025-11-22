@@ -3,6 +3,7 @@
 namespace Marketcall;
 
 use Marketcall\Common\Exceptions\ApiException;
+use Marketcall\Models\ListResponse;
 use Marketcall\Models\Paginator;
 
 abstract class AbstractClient
@@ -18,10 +19,10 @@ abstract class AbstractClient
      * @template T
      * @param array $response
      * @param class-string<T> $modelClass
-     * @return array{data: T[], paginator: ?Paginator}
+     * @return ListResponse
      * @throws ApiException
      */
-    protected function parseListResponse(array $response, string $modelClass): array
+    protected function parseListResponse(array $response, string $modelClass): ListResponse
     {
         $this->saveRequestId($response);
 
@@ -29,10 +30,7 @@ abstract class AbstractClient
 
         $paginator = isset($response['paginator']) ? Paginator::fromArray($response['paginator']) : null;
 
-        return [
-            'data' => $data,
-            'paginator' => $paginator,
-        ];
+        return new ListResponse($data, $paginator);
     }
 
     /**
