@@ -8,16 +8,23 @@ class ProgramsRequest extends AbstractRequest
 {
     private ?array $states = null;
     private ?array $offerStates = null;
+    private ?array $offerTypes = null;
 
-    private function setStates(array $states): self
+    public function setStates(?array $states): self
     {
         $this->states = $states;
         return $this;
     }
 
-    private function setOfferStates(array $offerStates): self
+    public function setOfferStates(?array $offerStates): self
     {
         $this->offerStates = $offerStates;
+        return $this;
+    }
+
+    public function setOfferTypes(?array $offerTypes): self
+    {
+        $this->offerTypes = $offerTypes;
         return $this;
     }
 
@@ -26,6 +33,7 @@ class ProgramsRequest extends AbstractRequest
         return array_filter([
             'states' => $this->states,
             'offer_states' => $this->offerStates,
+            'offer_types' => $this->offerTypes,
         ], fn($value) => $value !== null);
     }
 }

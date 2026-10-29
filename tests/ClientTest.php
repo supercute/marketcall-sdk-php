@@ -38,14 +38,14 @@ class ClientTest extends TestCase
 
         $result = $method->invokeArgs($this->client, [$response, Lead::class]);
 
-        $this->assertArrayHasKey('data', $result);
-        $this->assertArrayHasKey('paginator', $result);
+        $this->assertIsArray($result->data);
+        $this->assertNotNull($result->paginator);
 
-        foreach ($result['data'] as $item) {
+        foreach ($result->data as $item) {
             $this->assertInstanceOf(Lead::class, $item);
         }
 
-        $this->assertInstanceOf(Paginator::class, $result['paginator']);
+        $this->assertInstanceOf(Paginator::class, $result->paginator);
         $this->assertSame('test-request-id-123', $this->client->getLastRequestId());
     }
 }

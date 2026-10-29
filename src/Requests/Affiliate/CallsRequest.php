@@ -12,6 +12,7 @@ class CallsRequest extends AbstractRequest
     private ?DateTimeInterface $dateFrom = null;
     private ?DateTimeInterface $dateTo = null;
     private ?string $rentNumber = null;
+    private ?array $state = null;
     private ?int $page = null;
     private ?int $perPage = null;
 
@@ -30,6 +31,12 @@ class CallsRequest extends AbstractRequest
     public function setRentNumber(?string $rentNumber): self
     {
         $this->rentNumber = $rentNumber;
+        return $this;
+    }
+
+    public function setState(?array $state): self
+    {
+        $this->state = $state;
         return $this;
     }
 
@@ -52,6 +59,7 @@ class CallsRequest extends AbstractRequest
             'date_from' => $this->dateFrom?->format('Y-m-d H:i:s'),
             'date_to' => $this->dateTo?->format('Y-m-d H:i:s'),
             'rent_number' => $this->rentNumber,
+            'state' => $this->state,
             'page' => $this->page,
             'per_page' => $this->perPage,
         ], fn($value) => $value !== null);

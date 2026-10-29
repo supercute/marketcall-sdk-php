@@ -7,6 +7,7 @@ namespace Marketcall;
 use Marketcall\Common\Exceptions\ApiException;
 use Marketcall\Models\Affiliate\Call;
 use Marketcall\Models\Affiliate\CallCount;
+use Marketcall\Models\Affiliate\OfferTools;
 use Marketcall\Models\Affiliate\Category;
 use Marketcall\Models\Affiliate\Channel;
 use Marketcall\Models\Affiliate\IncomingCallAbility;
@@ -15,7 +16,9 @@ use Marketcall\Models\Affiliate\Offer;
 use Marketcall\Models\Affiliate\Phone;
 use Marketcall\Models\Affiliate\Program;
 use Marketcall\Models\Affiliate\Region;
+use Marketcall\Models\Merchant\BrokerLead;
 use Marketcall\Models\BinaryFile;
+use Marketcall\Models\ApiData;
 use Marketcall\Models\ListResponse;
 use Marketcall\Models\Success;
 use Marketcall\Requests\Affiliate\CallsCountRequest;
@@ -86,12 +89,12 @@ class AffiliateClient extends AbstractClient
     {
         $response = $this->httpClient->getBinary("calls/{$callId}/record");
 
-        $this->requestId = $response['request_id'] ?? null;
-
-        return BinaryFile::fromResponse(
+        $file = BinaryFile::fromResponse(
             content: $response['body'],
             headers: $response['headers']
         );
+        $this->requestId = $file->requestId;
+        return $file;
     }
 
     /**
@@ -165,8 +168,14 @@ class AffiliateClient extends AbstractClient
      */
     public function getIncomingCallAbility(int $offerId): IncomingCallAbility
     {
-        $response = $this->httpClient->get("offers/{$offerId}/incoming-call-ability");
+        $response = $this->httpClient->get("offer/{$offerId}/incoming-call-ability");
         return $this->parseResponse($response, IncomingCallAbility::class);
+    }
+
+    public function getOfferTools(int $offerId): OfferTools
+    {
+        $response = $this->httpClient->get("offers/{$offerId}/tools");
+        return $this->parseResponse($response, OfferTools::class);
     }
 
     /**
@@ -209,6 +218,91 @@ class AffiliateClient extends AbstractClient
     {
         $response = $this->httpClient->post("programs/{$programId}/cancel");
         return $this->parseResponse($response, Success::class);
+    }
+
+    public function getPromoMaterials(array $programs = [], array $offers = []): ListResponse
+    {
+        $params = array_filter(['programs' => $programs ?: null, 'offers' => $offers ?: null]);
+        $response = $this->httpClient->get('promo', $params);
+        return $this->parseListResponse($response, ApiData::class);
+    }
+
+    public function withdraw(array $data): Success
+    {
+        $response = $this->httpClient->post('withdraw', $data);
+        return $this->parseResponse($response, Success::class);
+    }
+
+    public function getExpenses(array $filters = []): ListResponse
+    {
+        $response = $this->httpClient->get('expense', $filters);
+        return $this->parseListResponse($response, ApiData::class);
+    }
+
+    public function createExpense(array $data): ApiData
+    {
+        $response = $this->httpClient->post('expense', $data);
+        return $this->parseResponse($response, ApiData::class);
+    }
+
+    public function getExpenseCategories(): ListResponse
+    {
+        $response = $this->httpClient->get('expense/categories');
+        return $this->parseListResponse($response, ApiData::class);
+    }
+
+    public function createExpenseCategory(array $data): ApiData
+    {
+        $response = $this->httpClient->post('expense/categories', $data);
+        return $this->parseResponse($response, ApiData::class);
+    }
+
+    public function createLead(array $data): Lead
+    {
+        $response = $this->httpClient->post('leads', $data);
+        return $this->parseResponse($response, Lead::class);
+    }
+
+    public function sendLeadPing(array $data): ApiData
+    {
+        $response = $this->httpClient->post('lead-pings', $data);
+        return $this->parseResponse($response, ApiData::class);
+    }
+
+    public function getBrokerLeads(array $filters = []): ListResponse
+    {
+        $response = $this->httpClient->get('broker/leads', $filters);
+        return $this->parseListResponse($response, BrokerLead::class);
+    }
+
+    public function getBrokerLead(int $leadId): BrokerLead
+    {
+        $response = $this->httpClient->get("broker/leads/{$leadId}");
+        return $this->parseResponse($response, BrokerLead::class);
+    }
+
+    public function addBrokerLead(array $data): BrokerLead
+    {
+        $response = $this->httpClient->post('broker/leads', $data);
+        return $this->parseResponse($response, BrokerLead::class);
+    }
+
+    public function deleteBrokerLead(int $leadId): Success
+    {
+        $response = $this->httpClient->delete("broker/leads/{$leadId}");
+        return $this->parseResponse($response, Success::class);
+    }
+
+    public function createPostback(array $data): ApiData
+    {
+        $response = $this->httpClient->post('postbacks', $data);
+        return $this->parseResponse($response, ApiData::class);
+    }
+
+    public function getPostbackTemplates(): ApiData
+    {
+        $response = $this->httpClient->get('postbacks/templates');
+        return $this->parseResponse($response, ApiData::class);
     }
 
     /**

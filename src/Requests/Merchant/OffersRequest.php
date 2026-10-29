@@ -64,7 +64,7 @@ class OffersRequest extends AbstractRequest
             'merchants' => $this->merchants,
             'regions' => $this->regions,
             'categories' => $this->categories,
-            'promotionTypes' => $this->promotionTypes,
+            'promotion_types' => $this->promotionTypes,
             'state' => $this->state,
             'page' => $this->page,
             'per_page' => $this->perPage,
